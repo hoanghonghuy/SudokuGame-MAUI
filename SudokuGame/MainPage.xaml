@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SudokuGame.MainPage"
+             Title="Sudoku Game">
+
+    <VerticalStackLayout Spacing="10" Padding="10" VerticalOptions="Center" HorizontalOptions="Center">
+
+        <Label x:Name="TimerLabel" Text="00:00" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+
+        <Frame BorderColor="Black" Padding="2" CornerRadius="0">
+            <Grid x:Name="SudokuGrid" WidthRequest="360" HeightRequest="360" ColumnSpacing="1" RowSpacing="1" BackgroundColor="DarkGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </Frame>
+
+        <HorizontalStackLayout x:Name="NumberPad" Spacing="5" HorizontalOptions="Center" />
+
+        <Border StrokeShape="RoundRectangle 8" StrokeThickness="1" Padding="10,5" Margin="0,5">
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="Difficulty:" VerticalOptions="Center"/>
+                <RadioButton x:Name="EasyRadioButton" Content="Easy" IsChecked="True" GroupName="Difficulty"/>
+                <RadioButton x:Name="MediumRadioButton" Content="Medium" GroupName="Difficulty"/>
+                <RadioButton x:Name="HardRadioButton" Content="Hard" GroupName="Difficulty"/>
+            </HorizontalStackLayout>
+        </Border>
+
+        <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+            <Button x:Name="HintButton" Text="Hint" WidthRequest="85" />
+            <Button x:Name="NewGameButton" Text="New Game" WidthRequest="85" />
+            <Button x:Name="EraseButton" Text="Erase" WidthRequest="85" />
+            <Button x:Name="CheckButton" Text="Check" WidthRequest="85" />
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+</ContentPage>
