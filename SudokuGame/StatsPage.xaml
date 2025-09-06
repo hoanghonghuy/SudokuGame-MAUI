@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SudokuGame.StatsPage"
+             Title="Thống kê">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="15">
+
+            <!-- Thanh chọn Độ khó -->
+            <Border StrokeShape="RoundRectangle 20" Padding="5" BackgroundColor="#F0F0F0">
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="5">
+                    <RadioButton x:Name="EasyRadio" Content="Dễ" GroupName="DifficultyStats" IsChecked="True" 
+                                 CheckedChanged="Difficulty_CheckedChanged" Grid.Column="0" />
+                    <RadioButton x:Name="MediumRadio" Content="Trung bình" GroupName="DifficultyStats" 
+                                 CheckedChanged="Difficulty_CheckedChanged" Grid.Column="1" />
+                    <RadioButton x:Name="HardRadio" Content="Khó" GroupName="DifficultyStats" 
+                                 CheckedChanged="Difficulty_CheckedChanged" Grid.Column="2" />
+                </Grid>
+            </Border>
+
+            <!-- Card Trò chơi -->
+            <Frame Padding="15" CornerRadius="10" BorderColor="LightGray">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📊 Trò chơi" FontSize="18" FontAttributes="Bold"/>
+                    <BoxView HeightRequest="1" Color="LightGray"/>
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Ván chơi đã bắt đầu" Grid.Row="0" Grid.Column="0"/>
+                        <Label x:Name="GamesPlayedLabel" Text="0" Grid.Row="0" Grid.Column="1" FontAttributes="Bold"/>
+
+                        <Label Text="Ván chơi đã thắng" Grid.Row="1" Grid.Column="0"/>
+                        <Label x:Name="GamesWonLabel" Text="0" Grid.Row="1" Grid.Column="1" FontAttributes="Bold"/>
+
+                        <Label Text="Tỉ lệ chiến thắng" Grid.Row="2" Grid.Column="0"/>
+                        <Label x:Name="WinRateLabel" Text="0.00%" Grid.Row="2" Grid.Column="1" FontAttributes="Bold"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Card Thời gian -->
+            <Frame Padding="15" CornerRadius="10" BorderColor="LightGray">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="⏱️ Thời gian" FontSize="18" FontAttributes="Bold"/>
+                    <BoxView HeightRequest="1" Color="LightGray"/>
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Thời gian ngắn nhất" Grid.Row="0" Grid.Column="0"/>
+                        <Label x:Name="BestTimeLabel" Text="--:--" Grid.Row="0" Grid.Column="1" FontAttributes="Bold"/>
+
+                        <Label Text="Thời gian trung bình" Grid.Row="1" Grid.Column="0"/>
+                        <Label x:Name="AverageTimeLabel" Text="--:--" Grid.Row="1" Grid.Column="1" FontAttributes="Bold"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Card Chuỗi thắng -->
+            <Frame Padding="15" CornerRadius="10" BorderColor="LightGray">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="⭐ Chuỗi thắng" FontSize="18" FontAttributes="Bold"/>
+                    <BoxView HeightRequest="1" Color="LightGray"/>
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Chuỗi thắng hiện tại" Grid.Row="0" Grid.Column="0"/>
+                        <Label x:Name="CurrentStreakLabel" Text="0" Grid.Row="0" Grid.Column="1" FontAttributes="Bold"/>
+
+                        <Label Text="Chuỗi thắng dài nhất" Grid.Row="1" Grid.Column="0"/>
+                        <Label x:Name="LongestStreakLabel" Text="0" Grid.Row="1" Grid.Column="1" FontAttributes="Bold"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

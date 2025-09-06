@@ -2,6 +2,9 @@
 {
     public class SudokuSolver
     {
+        // Sử dụng validator từ bên ngoài để tránh trùng lặp code
+        private readonly SudokuValidator _validator = new SudokuValidator();
+
         /// <summary>
         /// Cố gắng giải bàn cờ Sudoku bằng thuật toán backtracking.
         /// </summary>
@@ -19,7 +22,8 @@
                         // Thử điền các số từ 1 đến 9
                         for (int num = 1; num <= 9; num++)
                         {
-                            if (IsMoveValid(board, num, row, col))
+                            // (THAY ĐỔI) Gọi phương thức đã được public của validator
+                            if (_validator.IsMoveValid(board, num, row, col))
                             {
                                 // Nếu số này hợp lệ, điền vào và tiếp tục đệ quy
                                 board[row, col] = num;
@@ -65,34 +69,5 @@
             return null; // Không tìm thấy lời giải (có thể do người chơi điền sai ở đâu đó)
         }
 
-
-        /// <summary>
-        /// Kiểm tra xem một nước đi có hợp lệ không.
-        /// (Tương tự như trong SudokuValidator)
-        /// </summary>
-        private bool IsMoveValid(int[,] board, int number, int row, int col)
-        {
-            // Kiểm tra hàng và cột
-            for (int i = 0; i < 9; i++)
-            {
-                if (board[row, i] == number && i != col) return false;
-                if (board[i, col] == number && i != row) return false;
-            }
-
-            // Kiểm tra khối 3x3
-            int startRow = row - row % 3;
-            int startCol = col - col % 3;
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (board[i + startRow, j + startCol] == number)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
     }
 }

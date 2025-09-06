@@ -4,12 +4,21 @@
              x:Class="SudokuGame.MainPage"
              Title="Sudoku Game">
 
-    <VerticalStackLayout Spacing="10" Padding="10" VerticalOptions="Center" HorizontalOptions="Center">
+    <!-- Dùng Grid làm layout chính để dễ dàng đặt Header và các thành phần khác -->
+    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" Padding="10" RowSpacing="10">
 
-        <Label x:Name="TimerLabel" Text="00:00" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+        <!-- Hàng 0: Header (Độ khó, Lỗi, Thời gian) -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,*,*" HorizontalOptions="Fill" Padding="10,0">
+            <Label x:Name="DifficultyLabel" Text="Dễ" FontSize="16" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
+            <Label x:Name="MistakesLabel" Text="Lỗi: 0/3" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Red"/>
+            <Label x:Name="TimerLabel" Text="00:00" FontSize="20" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center"/>
+        </Grid>
 
-        <Frame BorderColor="Black" Padding="2" CornerRadius="0">
-            <Grid x:Name="SudokuGrid" WidthRequest="360" HeightRequest="360" ColumnSpacing="1" RowSpacing="1" BackgroundColor="DarkGray">
+        <!-- Hàng 1: Bàn cờ Sudoku -->
+        <Frame Grid.Row="1" BorderColor="Black" Padding="2" CornerRadius="0">
+            <Grid x:Name="SudokuGrid" WidthRequest="360" HeightRequest="360" ColumnSpacing="1" RowSpacing="1" BackgroundColor="DarkGray"
+                  VerticalOptions="Center" HorizontalOptions="Center">
+                <!-- Canh giữa Grid bên trong Frame -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -35,23 +44,21 @@
             </Grid>
         </Frame>
 
-        <HorizontalStackLayout x:Name="NumberPad" Spacing="5" HorizontalOptions="Center" />
+        <!-- Hàng 2: Number Pad -->
+        <HorizontalStackLayout x:Name="NumberPad" Grid.Row="2" Spacing="5" HorizontalOptions="Center" />
 
-        <Border StrokeShape="RoundRectangle 8" StrokeThickness="1" Padding="10,5" Margin="0,5">
+        <!-- Hàng 3: Lựa chọn độ khó (sẽ bị ẩn/vô hiệu hóa khi chơi Daily Challenge) -->
+        <Border x:Name="DifficultyRadioButtons" Grid.Row="3" StrokeShape="RoundRectangle 8" StrokeThickness="1" Padding="10,5" Margin="0,5">
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
-                <Label Text="Difficulty:" VerticalOptions="Center"/>
-                <RadioButton x:Name="EasyRadioButton" Content="Easy" IsChecked="True" GroupName="Difficulty"/>
-                <RadioButton x:Name="MediumRadioButton" Content="Medium" GroupName="Difficulty"/>
-                <RadioButton x:Name="HardRadioButton" Content="Hard" GroupName="Difficulty"/>
+                <Label Text="Độ khó:" VerticalOptions="Center"/>
+                <RadioButton x:Name="EasyRadioButton" Content="Dễ" IsChecked="True" GroupName="Difficulty" CheckedChanged="OnDifficultyChanged"/>
+                <RadioButton x:Name="MediumRadioButton" Content="Trung bình" GroupName="Difficulty" CheckedChanged="OnDifficultyChanged"/>
+                <RadioButton x:Name="HardRadioButton" Content="Khó" GroupName="Difficulty" CheckedChanged="OnDifficultyChanged"/>
             </HorizontalStackLayout>
         </Border>
 
-        <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
-            <Button x:Name="HintButton" Text="Hint" WidthRequest="85" />
-            <Button x:Name="NewGameButton" Text="New Game" WidthRequest="85" />
-            <Button x:Name="EraseButton" Text="Erase" WidthRequest="85" />
-            <Button x:Name="CheckButton" Text="Check" WidthRequest="85" />
-        </HorizontalStackLayout>
+        <!-- Hàng 4: Các nút chức năng -->
+        <HorizontalStackLayout x:Name="MainButtonLayout" Grid.Row="4" Spacing="5" HorizontalOptions="Center" />
 
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>

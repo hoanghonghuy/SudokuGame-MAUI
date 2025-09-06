@@ -1,87 +1,109 @@
 ﻿#region Using Directives
 using System;
 using System.Collections.Generic;
+using System.Linq;
 #endregion
 
 namespace SudokuGame.Logic
 {
     public class SudokuGenerator
     {
-        // dùng Dictionary để lưu nhiều list theo từng độ khó
-        private readonly Dictionary<Difficulty, List<int[,]>> _puzzles;
         private readonly Random _random;
+        private readonly SudokuSolver _solver;
 
         public SudokuGenerator()
         {
             _random = new Random();
-            _puzzles = new Dictionary<Difficulty, List<int[,]>>
-            {
-                // === Danh sách các đề bài DỄ ===
-                [Difficulty.Easy] = new List<int[,]>
-                {
-                    new int[9, 9] // Đề Dễ #1
-                    {
-                        { 5, 3, 0, 0, 7, 0, 0, 0, 0 },
-                        { 6, 0, 0, 1, 9, 5, 0, 0, 0 },
-                        { 0, 9, 8, 0, 0, 0, 0, 6, 0 },
-                        { 8, 0, 0, 0, 6, 0, 0, 0, 3 },
-                        { 4, 0, 0, 8, 0, 3, 0, 0, 1 },
-                        { 7, 0, 0, 0, 2, 0, 0, 0, 6 },
-                        { 0, 6, 0, 0, 0, 0, 2, 8, 0 },
-                        { 0, 0, 0, 4, 1, 9, 0, 0, 5 },
-                        { 0, 0, 0, 0, 8, 0, 0, 7, 9 }
-                    },
-                },
+            _solver = new SudokuSolver();
+        }
 
-                // === Danh sách các đề bài TRUNG BÌNH ===
-                [Difficulty.Medium] = new List<int[,]>
-                {
-                    new int[9, 9] // Đề Trung Bình #1
-                    {
-                        { 0, 0, 0, 2, 6, 0, 7, 0, 1 },
-                        { 6, 8, 0, 0, 7, 0, 0, 9, 0 },
-                        { 1, 9, 0, 0, 0, 4, 5, 0, 0 },
-                        { 8, 2, 0, 1, 0, 0, 0, 4, 0 },
-                        { 0, 0, 4, 6, 0, 2, 9, 0, 0 },
-                        { 0, 5, 0, 0, 0, 3, 0, 2, 8 },
-                        { 0, 0, 9, 3, 0, 0, 0, 7, 4 },
-                        { 0, 4, 0, 0, 5, 0, 0, 3, 6 },
-                        { 7, 0, 3, 0, 1, 8, 0, 0, 0 }
-                    },
-                },
-
-                // === Danh sách các đề bài KHÓ ===
-                [Difficulty.Hard] = new List<int[,]>
-                {
-                    new int[9, 9] // Đề Khó #1
-                    {
-                        { 0, 2, 0, 6, 0, 8, 0, 0, 0 },
-                        { 5, 8, 0, 0, 0, 9, 7, 0, 0 },
-                        { 0, 0, 0, 0, 4, 0, 0, 0, 0 },
-                        { 3, 7, 0, 0, 0, 0, 5, 0, 0 },
-                        { 6, 0, 0, 0, 0, 0, 0, 0, 4 },
-                        { 0, 0, 8, 0, 0, 0, 0, 1, 3 },
-                        { 0, 0, 0, 0, 2, 0, 0, 0, 0 },
-                        { 0, 0, 9, 8, 0, 0, 0, 3, 6 },
-                        { 0, 0, 0, 3, 0, 6, 0, 9, 0 }
-                    }
-                }
-            };
+        // Constructor cho Daily Challenge
+        public SudokuGenerator(int seed)
+        {
+            _random = new Random(seed); // Dùng seed để kết quả luôn giống nhau
+            _solver = new SudokuSolver();
         }
 
         /// <summary>
-        /// Lấy ngẫu nhiên một đề bài từ trong kho theo độ khó được chỉ định.
+        /// Lấy ngẫu nhiên một đề bài được tạo ra theo độ khó.
         /// </summary>
         public int[,] GenerateRandomPuzzle(Difficulty difficulty)
         {
-            if (_puzzles.TryGetValue(difficulty, out var puzzleList))
+            var board = new int[9, 9];
+
+            // Để tạo sự ngẫu nhiên, chúng ta cần giải một bàn cờ trống
+            // nhưng với một bộ số đã được xáo trộn
+            FillDiagonalBlocks(board);
+            _solver.Solve(board);
+
+            RemoveNumbers(board, difficulty);
+
+            return board;
+        }
+
+        // Giúp tạo ra các bàn cờ đã giải đa dạng hơn
+        private void FillDiagonalBlocks(int[,] board)
+        {
+            for (int i = 0; i < 9; i += 3)
             {
-                int index = _random.Next(puzzleList.Count);
-                return puzzleList[index];
+                FillBlock(board, i, i);
+            }
+        }
+
+        private void FillBlock(int[,] board, int row, int col)
+        {
+            var values = Enumerable.Range(1, 9).ToList();
+            Shuffle(values);
+            int index = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    board[row + i, col + j] = values[index++];
+                }
+            }
+        }
+
+        private void RemoveNumbers(int[,] board, Difficulty difficulty)
+        {
+            int cellsToRemove = difficulty switch
+            {
+                Difficulty.Medium => 50,
+                Difficulty.Hard => 58,
+                _ => 42, // Easy
+            };
+
+            var cells = new List<(int r, int c)>();
+            for (int r = 0; r < 9; r++)
+            {
+                for (int c = 0; c < 9; c++)
+                {
+                    cells.Add((r, c));
+                }
             }
 
-            // Trường hợp dự phòng: nếu không tìm thấy list cho độ khó đó, trả về đề dễ
-            return _puzzles[Difficulty.Easy][0];
+            Shuffle(cells);
+
+            int cellsRemoved = 0;
+            foreach (var cell in cells)
+            {
+                if (cellsRemoved >= cellsToRemove) break;
+                board[cell.r, cell.c] = 0;
+                cellsRemoved++;
+            }
+        }
+
+        private void Shuffle<T>(IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = _random.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
     }
 }

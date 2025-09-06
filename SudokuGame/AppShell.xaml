@@ -5,11 +5,30 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SudokuGame"
     Shell.FlyoutBehavior="Disabled"
-    Title="SudokuGame">
+    Title="Sudoku">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- 
+        TabBar định nghĩa thanh điều hướng ở dưới cùng.
+        Mỗi ShellContent là một tab.
+    -->
+    <TabBar>
+        <ShellContent
+            Title="Trò chơi"
+            Icon="game_icon.png" 
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+
+        <ShellContent
+            Title="Hàng ngày"
+            Icon="calendar_icon.png"
+            ContentTemplate="{DataTemplate local:DailyChallengePage}"
+            Route="DailyChallengePage" />
+
+        <ShellContent
+            Title="Thống kê"
+            Icon="stats_icon.png"
+            ContentTemplate="{DataTemplate local:StatsPage}"
+            Route="StatsPage" />
+    </TabBar>
 
 </Shell>

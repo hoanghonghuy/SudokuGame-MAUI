@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SudokuGame.DailyChallengePage"
+             Title="Thử Thách Hàng Ngày">
+    <VerticalStackLayout Spacing="10" Padding="15">
+
+        <!-- Header: Điều hướng tháng và hiển thị tháng/năm hiện tại -->
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" VerticalOptions="Center">
+            <Button x:Name="PrevMonthButton" Text="&lt;" Clicked="OnPrevMonthButtonClicked" WidthRequest="50"/>
+            <Label x:Name="MonthYearLabel" 
+                   Text="Tháng 9, 2025" 
+                   FontSize="22" 
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+            <Button x:Name="NextMonthButton" Text="&gt;" Clicked="OnNextMonthButtonClicked" WidthRequest="50"/>
+        </HorizontalStackLayout>
+
+        <!-- Lưới Lịch -->
+        <Frame BorderColor="DarkGray" Padding="5">
+            <Grid x:Name="CalendarGrid" ColumnSpacing="2" RowSpacing="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <!-- Hàng cho T2, T3, T4... -->
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </Frame>
+
+        <!-- Thông tin chi tiết của ngày được chọn -->
+        <Frame Padding="10">
+            <VerticalStackLayout Spacing="5">
+                <Label x:Name="SelectedDateLabel" Text="Chọn một ngày để xem thử thách" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <Label x:Name="ChallengeStatusLabel" Text="" FontSize="14" HorizontalOptions="Center"/>
+                <Button x:Name="PlayChallengeButton" Text="Chơi" IsVisible="False" Clicked="OnPlayChallengeClicked" HorizontalOptions="Center" WidthRequest="150"/>
+            </VerticalStackLayout>
+        </Frame>
+
+    </VerticalStackLayout>
+</ContentPage>
